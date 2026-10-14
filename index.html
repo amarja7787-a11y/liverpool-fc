@@ -1,0 +1,1243 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Liverpool FC</title>
+    <style>
+    @import url('https://fonts.googleapis.com/css2?family=Oswald:wght@600;700&display=swap');
+
+    /* ===== Design tokens ===== */
+    :root {
+        /* Brand colors */
+        --lfc-red: #d80c17;
+        --lfc-red-dark: #a3000a;
+        --lfc-dark: #111111;
+        --lfc-white: #ffffff;
+
+        /* Pitch greens (formation builder) */
+        --pitch-light: #0d9268;
+        --pitch-dark: #0a7c58;
+
+        /* Neutral grayscale, used instead of scattered hex values */
+        --gray-100: #f9f9f9;
+        --gray-200: #f4f4f4;
+        --gray-300: #e5e5e5;
+        --gray-400: #cccccc;
+        --gray-500: #999999;
+        --gray-600: #777777;
+        --gray-700: #555555;
+
+        /* Status colors */
+        --win: #2e7d32;
+        --draw: #888888;
+
+        /* Spacing scale */
+        --space-xs: 0.4rem;
+        --space-sm: 0.75rem;
+        --space-md: 1.25rem;
+        --space-lg: 2rem;
+        --space-xl: 3rem;
+
+        /* Shape */
+        --radius-sm: 4px;
+        --radius-md: 6px;
+        --radius-pill: 20px;
+
+        /* Elevation */
+        --shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.12);
+        --shadow-md: 0 6px 20px rgba(0, 0, 0, 0.22);
+
+        /* Type */
+        --font-display: 'Oswald', sans-serif;
+        --font-body: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    /* ===== Base ===== */
+    * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+        margin: 0;
+        font-family: var(--font-body);
+        background-color: var(--lfc-white);
+        color: var(--lfc-dark);
+        line-height: 1.6;
+    }
+
+    .section-title {
+        font-family: var(--font-display);
+        text-align: center;
+        padding: var(--space-xl) 0 var(--space-md);
+        font-size: 2rem;
+        text-transform: uppercase;
+        letter-spacing: 0.03em;
+        color: var(--lfc-red);
+    }
+
+    /* ===== Header ===== */
+    header {
+        background-color: var(--lfc-red);
+        color: white;
+        padding: var(--space-sm) 5%;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        border-bottom: 4px solid var(--lfc-dark);
+        position: sticky;
+        top: 0;
+        z-index: 1000;
+    }
+
+    .logo {
+        display: flex;
+        align-items: center;
+        gap: 0.6rem;
+        font-family: var(--font-display);
+        font-size: 1.3rem;
+        font-weight: 700;
+        letter-spacing: 0.03em;
+        text-transform: uppercase;
+    }
+
+    .logo-crest {
+        height: 34px;
+        width: auto;
+        filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.25));
+    }
+
+    nav { display: flex; flex-wrap: wrap; }
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        margin-left: var(--space-md);
+        font-weight: 600;
+        text-transform: uppercase;
+        font-size: 0.85rem;
+        letter-spacing: 0.02em;
+        padding-bottom: 2px;
+        border-bottom: 2px solid transparent;
+        transition: border-color 0.2s;
+    }
+
+    nav a:hover { border-color: rgba(255, 255, 255, 0.8); }
+
+    /* ===== Hero ===== */
+    .hero {
+        background: linear-gradient(rgba(216, 12, 23, 0.82), rgba(17, 17, 17, 0.92)),
+                    url('https://images.unsplash.com/photo-1574629810360-7efbbe195018?auto=format&fit=crop&q=80&w=1000');
+        background-size: cover;
+        background-position: center;
+        min-height: 56vh;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        color: white;
+        padding: var(--space-lg) 20px;
+    }
+
+    .hero-content {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: var(--space-lg);
+        margin-bottom: var(--space-sm);
+    }
+
+    .hero-logo {
+        height: 110px;
+        width: auto;
+        filter: drop-shadow(0 4px 10px rgba(0, 0, 0, 0.35));
+    }
+
+    .hero h1 {
+        font-family: var(--font-display);
+        font-size: 3.2rem;
+        margin: 0 0 0.4rem;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+    }
+
+    .hero p { font-size: 1.1rem; max-width: 600px; opacity: 0.92; margin: 0; }
+
+    /* ===== Timeline ===== */
+    .timeline-wrapper {
+        padding: 0 5% var(--space-xl);
+        max-width: 800px;
+        margin: 0 auto;
+    }
+
+    .timeline {
+        position: relative;
+        padding-left: 2.5rem;
+    }
+
+    .timeline::before {
+        content: '';
+        position: absolute;
+        left: 0; top: 0; bottom: 0;
+        width: 3px;
+        background: linear-gradient(to bottom, var(--lfc-red), var(--lfc-dark));
+    }
+
+    .timeline-item { position: relative; margin-bottom: var(--space-lg); }
+
+    .timeline-item::before {
+        content: '';
+        position: absolute;
+        left: -2.85rem;
+        top: 0.45rem;
+        width: 12px; height: 12px;
+        border-radius: 50%;
+        background: var(--lfc-red);
+        border: 3px solid white;
+        box-shadow: 0 0 0 2px var(--lfc-red);
+    }
+
+    .timeline-year {
+        font-size: 0.75rem;
+        color: var(--lfc-red);
+        font-weight: 700;
+        letter-spacing: 0.15em;
+        text-transform: uppercase;
+        margin-bottom: 0.2rem;
+    }
+
+    .timeline-title {
+        font-family: var(--font-display);
+        font-size: 1.2rem;
+        color: var(--lfc-dark);
+        margin-bottom: 0.3rem;
+    }
+
+    .timeline-desc { font-size: 0.95rem; color: var(--gray-700); margin: 0; }
+
+    /* ===== Trophy Collection ===== */
+    .stats-container { background-color: var(--gray-200); padding: var(--space-xl) 5%; }
+    .skill-bar-container { margin-bottom: var(--space-md); }
+    .skill-label { display: flex; justify-content: space-between; font-weight: bold; margin-bottom: 0.4rem; }
+    .progress-bg { background: var(--gray-400); height: 10px; border-radius: var(--radius-pill); overflow: hidden; }
+    .progress-fill { background: var(--lfc-red); height: 100%; border-radius: var(--radius-pill); }
+
+    /* ===== Fixtures & Results ===== */
+    #fixtures {
+        padding: 0 5% var(--space-xl);
+        max-width: 900px;
+        margin: 0 auto;
+    }
+
+    .fixtures-subtitle {
+        font-family: var(--font-display);
+        color: var(--lfc-red);
+        font-size: 1.1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.02em;
+        margin: var(--space-lg) 0 var(--space-sm);
+        border-left: 4px solid var(--lfc-red);
+        padding-left: 10px;
+    }
+
+    .fixtures-table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-bottom: var(--space-sm);
+        font-size: 0.92rem;
+        box-shadow: var(--shadow-sm);
+        border-radius: var(--radius-sm);
+        overflow: hidden;
+    }
+
+    .fixtures-table thead tr { background: var(--lfc-dark); color: white; text-align: left; }
+    .fixtures-table th, .fixtures-table td { padding: 11px 14px; }
+    .fixtures-table tbody tr:nth-child(even) { background: var(--gray-100); }
+    .fixtures-table tbody tr { border-bottom: 1px solid var(--gray-300); }
+
+    .badge {
+        display: inline-block;
+        padding: 3px 10px;
+        border-radius: var(--radius-sm);
+        font-size: 0.8rem;
+        font-weight: bold;
+        color: white;
+    }
+
+    .badge-w { background: var(--win); }
+    .badge-d { background: var(--draw); }
+    .badge-l { background: var(--lfc-red); }
+
+    .score { font-weight: bold; text-align: center; }
+    .comp-tag { font-size: 0.78rem; color: var(--lfc-red); font-weight: 600; }
+    .lfc-bold { font-weight: bold; }
+    .loading { text-align: center; color: var(--gray-500); padding: var(--space-md); font-style: italic; }
+
+    /* ===== Buttons (shared look across predict / formation / contact) ===== */
+    .predict-btn,
+    .formation-btn {
+        background: var(--lfc-red);
+        color: white;
+        border: none;
+        padding: 6px 14px;
+        border-radius: var(--radius-sm);
+        font-size: 0.8rem;
+        font-weight: bold;
+        cursor: pointer;
+        transition: background 0.2s, transform 0.1s;
+        white-space: nowrap;
+    }
+
+    .predict-btn:hover,
+    .formation-btn:hover { background: var(--lfc-red-dark); }
+    .predict-btn:active,
+    .formation-btn:active { transform: scale(0.97); }
+    .predict-btn:disabled { background: var(--gray-400); cursor: not-allowed; }
+
+    .formation-btn { background: var(--lfc-dark); padding: 8px 16px; }
+    .formation-btn:hover { background: #2a2a2a; }
+    .formation-btn.clear-btn { background: var(--gray-500); }
+    .formation-btn.clear-btn:hover { background: var(--gray-600); }
+
+    .prediction-row td { background: var(--lfc-dark) !important; padding: 0 !important; }
+
+    .prediction-box {
+        background: var(--lfc-dark);
+        color: white;
+        padding: var(--space-md);
+        border-left: 4px solid var(--lfc-red);
+        font-size: 0.9rem;
+        line-height: 1.7;
+    }
+
+    .prediction-box .pred-header {
+        font-family: var(--font-display);
+        color: var(--lfc-red);
+        font-size: 1rem;
+        text-transform: uppercase;
+        letter-spacing: 0.1em;
+        margin-bottom: 0.5rem;
+    }
+
+    .prediction-box .pred-score {
+        font-family: var(--font-display);
+        font-size: 1.8rem;
+        color: white;
+        margin: 0.4rem 0;
+    }
+
+    .prediction-box .pred-body { color: var(--gray-400); margin-top: 0.5rem; font-size: 0.88rem; }
+
+    /* ===== Contact ===== */
+    .contact-section { padding: var(--space-xl) 5%; text-align: center; background-color: var(--lfc-white); }
+
+    .contact-btn {
+        display: inline-block;
+        background-color: var(--lfc-red);
+        color: white;
+        padding: 14px 28px;
+        text-decoration: none;
+        font-weight: bold;
+        border-radius: var(--radius-sm);
+        margin-top: var(--space-md);
+        transition: background 0.2s;
+    }
+
+    .contact-btn:hover { background-color: var(--lfc-dark); }
+
+    /* ===== Footer ===== */
+    footer { background: var(--lfc-dark); color: white; text-align: center; padding: var(--space-xl) 0; }
+    .ynwa { font-style: italic; font-size: 1.4rem; color: var(--lfc-red); margin: var(--space-sm) 0 0; }
+
+    /* ===== Formation builder ===== */
+    .formation-wrapper { padding: 0 5% var(--space-xl); max-width: 1000px; margin: 0 auto; }
+
+    .formation-controls {
+        display: flex;
+        flex-wrap: wrap;
+        gap: var(--space-sm);
+        align-items: center;
+        justify-content: center;
+        margin-bottom: var(--space-lg);
+    }
+
+    .formation-controls select {
+        padding: 8px 14px;
+        border-radius: var(--radius-sm);
+        border: 1px solid var(--gray-400);
+        font-weight: 600;
+        font-size: 0.9rem;
+        background: white;
+    }
+
+    .formation-layout {
+        display: flex;
+        gap: var(--space-lg);
+        flex-wrap: wrap;
+        align-items: flex-start;
+    }
+
+    .pitch {
+        position: relative;
+        flex: 1 1 320px;
+        min-width: 280px;
+        max-width: 460px;
+        aspect-ratio: 2 / 3;
+        background: repeating-linear-gradient(
+            to bottom,
+            var(--pitch-light) 0%, var(--pitch-light) 10%,
+            var(--pitch-dark) 10%, var(--pitch-dark) 20%
+        );
+        border: 3px solid white;
+        border-radius: var(--radius-md);
+        box-shadow: var(--shadow-md);
+        overflow: hidden;
+        margin: 0 auto;
+    }
+
+    .pitch-halfway { position: absolute; top: 50%; left: 0; right: 0; height: 2px; background: rgba(255, 255, 255, 0.55); }
+
+    .pitch-circle {
+        position: absolute; top: 50%; left: 50%;
+        width: 22%; height: 14%;
+        border: 2px solid rgba(255, 255, 255, 0.55);
+        border-radius: 50%;
+        transform: translate(-50%, -50%);
+    }
+
+    .pitch-box {
+        position: absolute; left: 50%;
+        width: 48%; height: 11%;
+        border: 2px solid rgba(255, 255, 255, 0.55);
+        transform: translateX(-50%);
+    }
+
+    .pitch-box-top { top: 0; border-top: none; }
+    .pitch-box-bottom { bottom: 0; border-bottom: none; }
+
+    .formation-slot {
+        position: absolute;
+        transform: translate(-50%, -50%);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        width: 54px;
+        height: 54px;
+        border-radius: 50%;
+        background: rgba(17, 17, 17, 0.6);
+        border: 2px dashed rgba(255, 255, 255, 0.75);
+        color: white;
+        cursor: pointer;
+        text-align: center;
+        transition: background 0.15s, transform 0.1s;
+        padding: 2px;
+    }
+
+    .formation-slot:hover { background: rgba(216, 12, 23, 0.6); transform: translate(-50%, -50%) scale(1.06); }
+    .formation-slot.filled { background: var(--lfc-red); border: 2px solid white; }
+    .formation-slot.drag-over { background: rgba(255, 255, 255, 0.35); }
+
+    .slot-pos { font-size: 0.58rem; opacity: 0.85; text-transform: uppercase; letter-spacing: 0.05em; line-height: 1; }
+
+    .slot-name {
+        font-size: 0.7rem;
+        font-weight: 700;
+        line-height: 1.1;
+        margin-top: 2px;
+        max-width: 50px;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        white-space: nowrap;
+    }
+
+    .squad-panel { flex: 1 1 260px; min-width: 240px; }
+
+    .squad-group h4 {
+        font-family: var(--font-display);
+        color: var(--lfc-red);
+        text-transform: uppercase;
+        font-size: 0.8rem;
+        letter-spacing: 0.08em;
+        margin: var(--space-md) 0 0.5rem;
+        border-bottom: 2px solid var(--gray-300);
+        padding-bottom: 0.3rem;
+    }
+
+    .squad-group:first-child h4 { margin-top: 0; }
+    .squad-list { display: flex; flex-wrap: wrap; gap: 7px; }
+
+    .player-chip {
+        padding: 6px 12px;
+        background: var(--gray-200);
+        border: 1px solid var(--gray-300);
+        border-radius: var(--radius-pill);
+        font-size: 0.82rem;
+        cursor: grab;
+        user-select: none;
+        transition: all 0.15s;
+    }
+
+    .player-chip:hover { border-color: var(--lfc-red); color: var(--lfc-red); }
+    .player-chip.selected { background: var(--lfc-red); color: white; border-color: var(--lfc-red); }
+    .player-chip.assigned { opacity: 0.4; }
+
+    .formation-hint { font-size: 0.85rem; color: var(--gray-600); margin-top: var(--space-md); text-align: center; }
+
+    /* ===== Responsive ===== */
+    @media (max-width: 700px) {
+        .formation-layout { flex-direction: column; align-items: stretch; }
+        .pitch { max-width: 100%; aspect-ratio: 3 / 4; }
+    }
+
+    @media (max-width: 600px) {
+        .hero-content { flex-direction: column; gap: var(--space-sm); }
+        .hero-logo { height: 80px; }
+        .hero h1 { font-size: 2.1rem; }
+        .fixtures-table th, .fixtures-table td { padding: 8px 6px; font-size: 0.82rem; }
+        nav a { margin-left: var(--space-sm); font-size: 0.78rem; }
+    }
+
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo">
+            <img src="https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg" alt="Liverpool FC crest" class="logo-crest">
+            <span>Liverpool FC</span>
+        </div>
+        <nav>
+            <a href="#projects">History</a>
+            <a href="#skills">Trophy Collection</a>
+            <a href="#fixtures">Fixtures & Results</a>
+            <a href="#formation">Team Builder</a>
+            <a href="#contact">Contact</a>
+        </nav>
+    </header>
+
+    <section class="hero">
+        <div class="hero-content">
+            <img src="https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg" alt="LFC Logo" class="hero-logo">
+            <h1>Liverpool FC Guide</h1>
+        </div>
+        <p>Student Developer | Liverpool FC Fan | Built with HTML & CSS</p>
+    </section>
+
+    <h2 id="projects" class="section-title">Timeline</h2>
+    <div class="timeline-wrapper">
+        <div class="timeline">
+            <div class="timeline-item">
+                <div class="timeline-year">1892</div>
+                <div class="timeline-title">The Founding</div>
+                <p class="timeline-desc">Liverpool FC formed at Anfield after a dispute between Everton and the ground's landlord, beginning a journey that would transform a city's identity.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">1965</div>
+                <div class="timeline-title">Shankly's First FA Cup</div>
+                <p class="timeline-desc">Bill Shankly's Liverpool won the FA Cup for the first time, cementing a cultural revolution at the club and laying the groundwork for decades of dominance.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">1977</div>
+                <div class="timeline-title">First European Cup</div>
+                <p class="timeline-desc">A 3–1 victory over Borussia Mönchengladbach in Rome announced Liverpool as continental giants. The first of four European Cups in eight years.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">1984</div>
+                <div class="timeline-title">Fourth European Cup</div>
+                <p class="timeline-desc">Liverpool defeated AS Roma on penalties in their own stadium to claim a fourth European Cup — the peak of Bob Paisley and Joe Fagan's legendary era.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2005</div>
+                <div class="timeline-title">The Miracle of Istanbul</div>
+                <p class="timeline-desc">Three goals down at half-time against AC Milan, Liverpool completed one of sport's most extraordinary comebacks to win the Champions League on penalties.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2019</div>
+                <div class="timeline-title">Champions League — Madrid</div>
+                <p class="timeline-desc">Under Jürgen Klopp, Liverpool defeated Tottenham 2–0 in Madrid to claim a sixth European Cup and end a decade-long wait for silverware.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2020</div>
+                <div class="timeline-title">Premier League Champions</div>
+                <p class="timeline-desc">After 30 years, Klopp's side clinched the title with seven games to spare — the fastest team to be crowned champions in Premier League history.</p>
+            </div>
+            <div class="timeline-item">
+                <div class="timeline-year">2025</div>
+                <div class="timeline-title">Arne Slot Era Begins</div>
+                <p class="timeline-desc">New manager Arne Slot leads Liverpool to the Premier League title in his debut season, continuing the club's run as one of Europe's elite.</p>
+            </div>
+        </div>
+    </div>
+
+    <div id="skills" class="stats-container">
+        <h2 class="section-title">Trophy Collection</h2>
+        <div class="skill-bar-container">
+            <div class="skill-label"><span>Champions League</span><span>6</span></div>
+            <div class="progress-bg"><div class="progress-fill" style="width: 55%;"></div></div>
+        </div>
+        <div class="skill-bar-container">
+            <div class="skill-label"><span>Premier League</span><span>20</span></div>
+            <div class="progress-bg"><div class="progress-fill" style="width: 90%;"></div></div>
+        </div>
+        <div class="skill-bar-container">
+            <div class="skill-label"><span>FA Cup</span><span>8</span></div>
+            <div class="progress-bg"><div class="progress-fill" style="width: 75%;"></div></div>
+        </div>
+    </div>
+
+    <h2 class="section-title" style="margin-bottom:0;">Fixtures & Results</h2>
+    <div id="fixtures">
+        <p class="fixtures-subtitle">Recent Results</p>
+        <div id="results-container"><p class="loading">Loading results...</p></div>
+
+        <p class="fixtures-subtitle">Upcoming Fixtures</p>
+        <div id="fixtures-container"><p class="loading">Loading fixtures...</p></div>
+    </div>
+
+    <h2 id="formation" class="section-title" style="margin-bottom:0;">Formation Builder</h2>
+    <div class="formation-wrapper">
+        <div class="formation-controls">
+            <label for="formation-select"><strong>Formation:</strong></label>
+            <select id="formation-select" onchange="renderFormation()">
+                <option value="4-3-3">4-3-3</option>
+                <option value="4-2-3-1">4-2-3-1</option>
+                <option value="4-4-2">4-4-2</option>
+                <option value="3-4-3">3-4-3</option>
+                <option value="3-5-2">3-5-2</option>
+            </select>
+            <button type="button" class="formation-btn" onclick="autoFillFormation()">⚡ Auto-Fill XI</button>
+            <button type="button" class="formation-btn clear-btn" onclick="clearFormation()">Clear</button>
+        </div>
+        <div class="formation-layout">
+            <div id="pitch" class="pitch">
+                <div class="pitch-halfway"></div>
+                <div class="pitch-circle"></div>
+                <div class="pitch-box pitch-box-top"></div>
+                <div class="pitch-box pitch-box-bottom"></div>
+            </div>
+            <div class="squad-panel">
+                <div class="squad-group"><h4>Goalkeepers</h4><div class="squad-list" id="squad-GK"></div></div>
+                <div class="squad-group"><h4>Defenders</h4><div class="squad-list" id="squad-DEF"></div></div>
+                <div class="squad-group"><h4>Midfielders</h4><div class="squad-list" id="squad-MID"></div></div>
+                <div class="squad-group"><h4>Forwards</h4><div class="squad-list" id="squad-FWD"></div></div>
+            </div>
+        </div>
+        <p class="formation-hint">Drag a player onto a slot (desktop), or tap a player then tap a slot (mobile). Tap a filled slot with nothing selected to send that player back to the bench.</p>
+    </div>
+
+    <section id="contact" class="contact-section">
+        <h2 class="section-title">Contact information</h2>
+        <a href="tel:+97689987787" class="contact-btn">Call Me: +976 89987787</a>
+    </section>
+
+    <footer>
+        <img src="https://upload.wikimedia.org/wikipedia/en/0/0c/Liverpool_FC.svg" alt="LFC" style="height: 50px; margin-bottom: 10px;">
+        <p class="ynwa">You'll Never Walk Alone</p>
+        <p>&copy; 2026 Liverpool FC Portfolio | Amartuvshin & Sodbayar</p>
+    </footer>
+
+    <script>
+    const GROQ_KEY = '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';
+    const LFC_ID = 64;
+
+    // football-data.org does NOT send a wildcard Access-Control-Allow-Origin to
+    // browsers — it sends a fixed "http://localhost" value meant only for quick
+    // local testing on that exact origin. It never matches 127.0.0.1, any other
+    // port, or a real production domain, and public CORS-relay services (we
+    // tried three) are unreliable: they go down, change behavior, or get
+    // discontinued without notice.
+    //
+    // The fix is a small server-side proxy that holds the API key and returns
+    // data with correct CORS headers for your actual site. football-proxy-worker.js
+    // (shipped alongside this file) is a ready-to-deploy Cloudflare Worker that
+    // does exactly that — deploy it (see the comments in that file for the
+    // 5-minute setup) and paste its URL below.
+    const WORKER_URL = 'https://lfc-football-proxy.amarja7787.workers.dev';
+
+    // football-data.org's free tier is capped at 10 requests/minute — rapid
+    // reloading or repeated "Predict" clicks while testing can trip a 429 that
+    // otherwise looks just like a dead connection. We surface the real reason
+    // here instead of hiding it behind a generic message.
+    //
+    // `path` is the football-data.org v4 path+query, e.g. "/teams/64/matches?...".
+    async function fetchFootballData(path) {
+        if (WORKER_URL.includes('PASTE-YOUR-WORKER-URL-HERE')) {
+            throw new Error(
+                'WORKER_URL is still a placeholder — deploy football-proxy-worker.js ' +
+                'to Cloudflare Workers and paste its URL into script.js (see the ' +
+                'comments at the top of both files for setup steps).'
+            );
+        }
+
+        const res = await fetch(WORKER_URL + '?path=' + encodeURIComponent(path));
+        if (res.status === 429) throw new Error('rate limited (429) — free tier is 10 requests/minute, wait a minute and retry');
+        if (!res.ok) throw new Error('HTTP ' + res.status + ' from proxy');
+        return await res.json();
+    }
+
+    function formatDate(dateStr) {
+        const d = new Date(dateStr);
+        return d.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    }
+
+    function getResult(match) {
+        const home = match.score.fullTime.home;
+        const away = match.score.fullTime.away;
+        if (home === null) return '';
+        const lfcHome = match.homeTeam.id === LFC_ID;
+        const lfcScore = lfcHome ? home : away;
+        const oppScore = lfcHome ? away : home;
+        if (lfcScore > oppScore) return '<span class="badge badge-w">W</span>';
+        if (lfcScore < oppScore) return '<span class="badge badge-l">L</span>';
+        return '<span class="badge badge-d">D</span>';
+    }
+
+    // Fetch last 5 matches for any team and return a readable form string
+    async function getTeamForm(teamId, teamName) {
+        try {
+            const today = new Date();
+            const past = new Date();
+            past.setDate(today.getDate() - 120);
+            const dateFrom = past.toISOString().split('T')[0];
+            const dateTo = today.toISOString().split('T')[0];
+
+            const path = `/teams/${teamId}/matches?dateFrom=${dateFrom}&dateTo=${dateTo}&status=FINISHED`;
+            const data = await fetchFootballData(path);
+
+            if (!data.matches || data.matches.length === 0) {
+                return `${teamName}: No recent match data available.`;
+            }
+
+            // Get last 5
+            const last5 = data.matches.slice(-5);
+            const formLines = last5.map(m => {
+                const isHome = m.homeTeam.id === teamId;
+                const opp = isHome ? (m.awayTeam.shortName || m.awayTeam.name) : (m.homeTeam.shortName || m.homeTeam.name);
+                const scored = isHome ? m.score.fullTime.home : m.score.fullTime.away;
+                const conceded = isHome ? m.score.fullTime.away : m.score.fullTime.home;
+                const result = scored > conceded ? 'W' : scored < conceded ? 'L' : 'D';
+                const venue = isHome ? 'H' : 'A';
+                return `  - ${formatDate(m.utcDate)} vs ${opp} (${venue}): ${scored}-${conceded} ${result} [${m.competition.name}]`;
+            });
+
+            // Also fetch squad to get real player names
+            return `${teamName} last 5 results:\n${formLines.join('\n')}`;
+
+        } catch (e) {
+            return `${teamName}: Could not fetch form data.`;
+        }
+    }
+
+    // Real confirmed Liverpool 2025-26 squad (source: liverpoolfc.com official + Premier League)
+    // Departures: Luis Diaz (Bayern Munich), Darwin Nunez, Trent Alexander-Arnold, Diogo Jota
+    // New signings: Florian Wirtz, Milos Kerkez, Jeremie Frimpong, Hugo Ekitike, Alexander Isak, Giorgi Mamardashvili, Giovanni Leoni
+    // Kept as a structured list so the AI-prompt text and the formation builder
+    // below both read from one source of truth instead of drifting apart.
+    const LFC_PLAYERS = [
+        { name: 'Alisson Becker', group: 'GK' },
+        { name: 'Giorgi Mamardashvili', group: 'GK' },
+        { name: 'Freddie Woodman', group: 'GK' },
+        { name: 'Armin Pecsi', group: 'GK' },
+        { name: 'Virgil van Dijk', group: 'DEF' },
+        { name: 'Ibrahima Konate', group: 'DEF' },
+        { name: 'Joe Gomez', group: 'DEF' },
+        { name: 'Conor Bradley', group: 'DEF' },
+        { name: 'Andy Robertson', group: 'DEF' },
+        { name: 'Kostas Tsimikas', group: 'DEF' },
+        { name: 'Milos Kerkez', group: 'DEF' },
+        { name: 'Jeremie Frimpong', group: 'DEF' },
+        { name: 'Giovanni Leoni', group: 'DEF' },
+        { name: 'Ryan Gravenberch', group: 'MID' },
+        { name: 'Alexis Mac Allister', group: 'MID' },
+        { name: 'Dominik Szoboszlai', group: 'MID' },
+        { name: 'Curtis Jones', group: 'MID' },
+        { name: 'Wataru Endo', group: 'MID' },
+        { name: 'Stefan Bajcetic', group: 'MID' },
+        { name: 'Trey Nyoni', group: 'MID' },
+        { name: 'James McConnell', group: 'MID' },
+        { name: 'Florian Wirtz', group: 'MID' },
+        { name: 'Mohamed Salah', group: 'FWD' },
+        { name: 'Cody Gakpo', group: 'FWD' },
+        { name: 'Hugo Ekitike', group: 'FWD' },
+        { name: 'Alexander Isak', group: 'FWD' },
+        { name: 'Harvey Elliott', group: 'FWD' },
+        { name: 'Federico Chiesa', group: 'FWD' },
+    ];
+
+    function buildSquadText() {
+        const labels = { GK: 'Goalkeepers', DEF: 'Defenders', MID: 'Midfielders', FWD: 'Forwards' };
+        const byGroup = { GK: [], DEF: [], MID: [], FWD: [] };
+        LFC_PLAYERS.forEach(p => byGroup[p.group].push(p.name));
+        return Object.entries(byGroup)
+            .map(([g, names]) => `  ${labels[g]}: ${names.join(', ')}`)
+            .join('\n');
+    }
+    const LFC_SQUAD = buildSquadText();
+
+    // Fetch squad for a team and return player names by position
+    async function getSquad(teamId) {
+        // For Liverpool, always use our verified hardcoded squad — API data lags behind transfers
+        if (String(teamId) === String(LFC_ID)) return LFC_SQUAD;
+
+        try {
+            const path = `/teams/${teamId}`;
+            const data = await fetchFootballData(path);
+
+            if (!data.squad || data.squad.length === 0) return null;
+
+            const byPosition = {};
+            data.squad.forEach(p => {
+                const pos = p.position || 'Unknown';
+                if (!byPosition[pos]) byPosition[pos] = [];
+                byPosition[pos].push(p.name);
+            });
+
+            return Object.entries(byPosition)
+                .map(([pos, players]) => `  ${pos}: ${players.join(', ')}`)
+                .join('\n');
+
+        } catch (e) {
+            return null;
+        }
+    }
+
+    function buildResultsTable(matches) {
+        if (!matches.length) return '<p class="loading">No recent results found.</p>';
+        let rows = matches.map(m => {
+            const lfcHome = m.homeTeam.id === LFC_ID;
+            const home = lfcHome ? `<span class="lfc-bold">Liverpool</span>` : m.homeTeam.shortName || m.homeTeam.name;
+            const away = !lfcHome ? `<span class="lfc-bold">Liverpool</span>` : m.awayTeam.shortName || m.awayTeam.name;
+            const hs = m.score.fullTime.home ?? '-';
+            const as = m.score.fullTime.away ?? '-';
+            return `<tr>
+                <td>${formatDate(m.utcDate)}</td>
+                <td>${home}</td>
+                <td class="score">${hs} – ${as}</td>
+                <td>${away}</td>
+                <td style="text-align:center;">${getResult(m)}</td>
+                <td class="comp-tag">${m.competition.name}</td>
+            </tr>`;
+        }).join('');
+
+        return `<table class="fixtures-table">
+            <thead><tr>
+                <th>Date</th><th>Home</th><th style="text-align:center;">Score</th>
+                <th>Away</th><th style="text-align:center;">Result</th><th>Competition</th>
+            </tr></thead>
+            <tbody>${rows}</tbody>
+        </table>`;
+    }
+
+    function buildFixturesTable(matches) {
+        if (!matches.length) return '<p class="loading">No upcoming fixtures found.</p>';
+
+        let rows = matches.map((m, i) => {
+            const lfcHome = m.homeTeam.id === LFC_ID;
+            const homeName = m.homeTeam.shortName || m.homeTeam.name;
+            const awayName = m.awayTeam.shortName || m.awayTeam.name;
+            const home = lfcHome ? `<span class="lfc-bold">Liverpool</span>` : homeName;
+            const away = !lfcHome ? `<span class="lfc-bold">Liverpool</span>` : awayName;
+            const opponentId = lfcHome ? m.awayTeam.id : m.homeTeam.id;
+            const opponentName = lfcHome ? awayName : homeName;
+            const venue = lfcHome ? 'Anfield (Home)' : 'Away';
+            const rowId = `pred-row-${i}`;
+
+            return `<tr>
+                <td>${formatDate(m.utcDate)}</td>
+                <td>${home}</td>
+                <td class="score">vs</td>
+                <td>${away}</td>
+                <td class="comp-tag">${m.competition.name}</td>
+                <td>
+                    <button class="predict-btn" 
+                        data-rowid="${rowId}"
+                        data-oppid="${opponentId}"
+                        data-oppname="${opponentName.replace(/"/g, '&quot;')}"
+                        data-venue="${venue}"
+                        data-comp="${m.competition.name.replace(/"/g, '&quot;')}"
+                        onclick="togglePrediction(this)">
+                        🤖 Predict
+                    </button>
+                </td>
+            </tr>
+            <tr id="${rowId}" style="display:none;" class="prediction-row">
+                <td colspan="6">
+                    <div class="prediction-box">
+                        <div class="pred-header">⚽ AI Match Prediction</div>
+                        <div class="pred-body">Fetching live squad & form data...</div>
+                    </div>
+                </td>
+            </tr>`;
+        }).join('');
+
+        return `<table class="fixtures-table">
+            <thead><tr>
+                <th>Date</th><th>Home</th><th></th>
+                <th>Away</th><th>Competition</th><th>AI Predict</th>
+            </tr></thead>
+            <tbody>${rows}</tbody>
+        </table>`;
+    }
+
+    async function togglePrediction(btn) {
+        const rowId = btn.dataset.rowid;
+        const opponentId = btn.dataset.oppid;
+        const opponentName = btn.dataset.oppname;
+        const venue = btn.dataset.venue;
+        const competition = btn.dataset.comp;
+        const row = document.getElementById(rowId);
+
+        // Toggle off
+        if (row.style.display !== 'none') {
+            row.style.display = 'none';
+            btn.textContent = '🤖 Predict';
+            return;
+        }
+
+        row.style.display = 'table-row';
+        btn.textContent = '⏳ Fetching data...';
+        btn.disabled = true;
+
+        const box = row.querySelector('.pred-body');
+        box.innerHTML = '⏳ Fetching live squad & recent form from API...';
+
+        try {
+            // Fetch real data for BOTH teams simultaneously
+            const [lfcForm, oppForm, lfcSquad, oppSquad] = await Promise.all([
+                getTeamForm(LFC_ID, 'Liverpool'),
+                getTeamForm(opponentId, opponentName),
+                getSquad(LFC_ID),
+                getSquad(opponentId)
+            ]);
+
+            box.innerHTML = '🤖 AI is analysing the data...';
+
+            const squadInfo = (name, squad) => squad
+                ? `${name} current squad:\n${squad}`
+                : `${name} squad: Not available`;
+
+            const prompt = `You are a football analyst. Use ONLY the data provided below — do not invent players, stats, or facts.
+
+    === LIVERPOOL SQUAD (real, current) ===
+    ${squadInfo('Liverpool', lfcSquad)}
+
+    === ${opponentName.toUpperCase()} SQUAD (real, current) ===
+    ${squadInfo(opponentName, oppSquad)}
+
+    === LIVERPOOL RECENT FORM ===
+    ${lfcForm}
+
+    === ${opponentName.toUpperCase()} RECENT FORM ===
+    ${oppForm}
+
+    === MATCH INFO ===
+    Fixture: Liverpool vs ${opponentName}
+    Competition: ${competition}
+    Venue: ${venue}
+
+    Based ONLY on the data above, provide:
+    PREDICTED SCORE: Liverpool X - X ${opponentName}
+    LIKELY SCORERS: [name 2-3 players from the squads listed above only, with brief reason]
+    ANALYSIS: [2-3 sentences based only on the form data above]
+    CONFIDENCE: [Low / Medium / High]
+
+    Do NOT mention any player not listed in the squads above. Alexander Isak, Florian Wirtz, Hugo ekitike(but because of injury tend to return january 2027), rio ngumoha, victor munoz,Alexis Mac Allister, Cody Gakpo,  Virgil van Dijk, Ibrahima Konate, Joe Gomez, Conor Bradley, Andy Robertson, Kostas Tsimikas, Milos Kerkez, Jeremie Frimpong, Giovanni Leoni, Ryan Gravenberch, Dominik Szoboszlai, Curtis Jones, Wataru Endo, Stefan Bajcetic, Trey Nyoni, James McConnell, Harvey elliot, or you can check the current squad from the internet and please dont include names that are no longer currently in liverpool like salah and if it is the start of the season dont compare it to the form of the ending of the season`;
+
+            const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${GROQ_KEY}`
+                },
+                body: JSON.stringify({
+                    // llama-3.1-8b-instant is deprecated on Groq (shutdown 08/16/26) —
+                    // openai/gpt-oss-20b is the recommended, currently-supported replacement.
+                    model: 'openai/gpt-oss-20b',
+                    max_tokens: 400,
+                    messages: [{ role: 'user', content: prompt }]
+                })
+            });
+
+            if (!response.ok) {
+                const errText = await response.text();
+                throw new Error(`Groq API error ${response.status}: ${errText}`);
+            }
+
+            const data = await response.json();
+            const text = data.choices?.[0]?.message?.content || 'Could not generate prediction.';
+
+            const lines = text.split('\n').filter(l => l.trim());
+            let html = '';
+            lines.forEach(line => {
+                if (line.startsWith('PREDICTED SCORE:')) {
+                    html += `<div class="pred-score">⚽ ${line.replace('PREDICTED SCORE:', '').trim()}</div>`;
+                } else if (line.startsWith('LIKELY SCORERS:')) {
+                    html += `<div style="margin-top:8px;"><strong style="color:#fff;">🎯 Likely Scorers:</strong> ${line.replace('LIKELY SCORERS:', '').trim()}</div>`;
+                } else if (line.startsWith('ANALYSIS:')) {
+                    html += `<div style="margin-top:8px;color:#ccc;">📊 ${line.replace('ANALYSIS:', '').trim()}</div>`;
+                } else if (line.startsWith('CONFIDENCE:')) {
+                    html += `<div style="margin-top:8px;color:#f9a;">🔮 Confidence: <strong>${line.replace('CONFIDENCE:', '').trim()}</strong></div>`;
+                }
+            });
+
+            box.innerHTML = html || `<div style="color:#ccc;">${text}</div>`;
+            btn.textContent = '✖ Close';
+            btn.disabled = false;
+
+        } catch (err) {
+            console.error(err);
+            box.innerHTML = '<span style="color:#f88;">Failed to load prediction. Please try again.</span>';
+            btn.textContent = '🤖 Predict';
+            btn.disabled = false;
+        }
+    }
+
+    async function loadMatches() {
+        try {
+            const today = new Date();
+            const past = new Date();
+            past.setDate(today.getDate() - 180);
+            const future = new Date();
+            future.setDate(today.getDate() + 90);
+            const dateFrom = past.toISOString().split('T')[0];
+            const dateTo = future.toISOString().split('T')[0];
+
+            const allPath = `/teams/${LFC_ID}/matches?dateFrom=${dateFrom}&dateTo=${dateTo}`;
+            const data = await fetchFootballData(allPath);
+
+            if (!data.matches) {
+                // Previously this only updated results-container and left
+                // fixtures-container stuck on "Loading fixtures..." forever —
+                // now both reflect the same failure so it's obvious both are down,
+                // not just "upcoming" silently stalling.
+                const msg = '<p class="loading">Could not load match data.</p>';
+                document.getElementById('results-container').innerHTML = msg;
+                document.getElementById('fixtures-container').innerHTML = msg;
+                return;
+            }
+
+            const finished = data.matches.filter(m => m.status === 'FINISHED').slice(-5).reverse();
+            const upcoming = data.matches.filter(m => m.status === 'SCHEDULED' || m.status === 'TIMED').slice(0, 5);
+
+            document.getElementById('results-container').innerHTML =
+                finished.length ? buildResultsTable(finished) : '<p class="loading">No recent results found.</p>';
+
+            document.getElementById('fixtures-container').innerHTML =
+                upcoming.length ? buildFixturesTable(upcoming) : '<p class="loading">No upcoming fixtures scheduled yet.</p>';
+
+        } catch (err) {
+            console.error(err);
+            // Show the real reason instead of a generic "connection error" so
+            // this is debuggable from the page itself — open the browser console
+            // (F12) for the full attempt-by-attempt log behind this summary.
+            const firstLine = String(err.message || err).split('\n')[0];
+            const errorHtml = `<p class="loading">Couldn't load match data (${firstLine}). Open the browser console for details, or try again shortly if this is a rate limit.</p>`;
+            document.getElementById('results-container').innerHTML = errorHtml;
+            document.getElementById('fixtures-container').innerHTML = errorHtml;
+        }
+    }
+
+    // --- Formation Builder ---
+
+    const FORMATIONS = {
+        '4-3-3': [
+            { id: 'gk', label: 'GK', group: 'GK', top: 90, left: 50 },
+            { id: 'lb', label: 'LB', group: 'DEF', top: 70, left: 15 },
+            { id: 'cb1', label: 'CB', group: 'DEF', top: 73, left: 35 },
+            { id: 'cb2', label: 'CB', group: 'DEF', top: 73, left: 65 },
+            { id: 'rb', label: 'RB', group: 'DEF', top: 70, left: 85 },
+            { id: 'cm1', label: 'CM', group: 'MID', top: 47, left: 25 },
+            { id: 'cm2', label: 'CM', group: 'MID', top: 50, left: 50 },
+            { id: 'cm3', label: 'CM', group: 'MID', top: 47, left: 75 },
+            { id: 'lw', label: 'LW', group: 'FWD', top: 18, left: 18 },
+            { id: 'st', label: 'ST', group: 'FWD', top: 10, left: 50 },
+            { id: 'rw', label: 'RW', group: 'FWD', top: 18, left: 82 },
+        ],
+        '4-2-3-1': [
+            { id: 'gk', label: 'GK', group: 'GK', top: 90, left: 50 },
+            { id: 'lb', label: 'LB', group: 'DEF', top: 70, left: 15 },
+            { id: 'cb1', label: 'CB', group: 'DEF', top: 73, left: 35 },
+            { id: 'cb2', label: 'CB', group: 'DEF', top: 73, left: 65 },
+            { id: 'rb', label: 'RB', group: 'DEF', top: 70, left: 85 },
+            { id: 'dm1', label: 'CDM', group: 'MID', top: 56, left: 35 },
+            { id: 'dm2', label: 'CDM', group: 'MID', top: 56, left: 65 },
+            { id: 'lam', label: 'LAM', group: 'MID', top: 30, left: 18 },
+            { id: 'cam', label: 'CAM', group: 'MID', top: 28, left: 50 },
+            { id: 'ram', label: 'RAM', group: 'MID', top: 30, left: 82 },
+            { id: 'st', label: 'ST', group: 'FWD', top: 10, left: 50 },
+        ],
+        '4-4-2': [
+            { id: 'gk', label: 'GK', group: 'GK', top: 90, left: 50 },
+            { id: 'lb', label: 'LB', group: 'DEF', top: 70, left: 15 },
+            { id: 'cb1', label: 'CB', group: 'DEF', top: 73, left: 35 },
+            { id: 'cb2', label: 'CB', group: 'DEF', top: 73, left: 65 },
+            { id: 'rb', label: 'RB', group: 'DEF', top: 70, left: 85 },
+            { id: 'lm', label: 'LM', group: 'MID', top: 47, left: 15 },
+            { id: 'cm1', label: 'CM', group: 'MID', top: 50, left: 38 },
+            { id: 'cm2', label: 'CM', group: 'MID', top: 50, left: 62 },
+            { id: 'rm', label: 'RM', group: 'MID', top: 47, left: 85 },
+            { id: 'st1', label: 'ST', group: 'FWD', top: 12, left: 35 },
+            { id: 'st2', label: 'ST', group: 'FWD', top: 12, left: 65 },
+        ],
+        '3-4-3': [
+            { id: 'gk', label: 'GK', group: 'GK', top: 90, left: 50 },
+            { id: 'cb1', label: 'CB', group: 'DEF', top: 73, left: 25 },
+            { id: 'cb2', label: 'CB', group: 'DEF', top: 76, left: 50 },
+            { id: 'cb3', label: 'CB', group: 'DEF', top: 73, left: 75 },
+            { id: 'lm', label: 'LM', group: 'MID', top: 50, left: 12 },
+            { id: 'cm1', label: 'CM', group: 'MID', top: 52, left: 38 },
+            { id: 'cm2', label: 'CM', group: 'MID', top: 52, left: 62 },
+            { id: 'rm', label: 'RM', group: 'MID', top: 50, left: 88 },
+            { id: 'lw', label: 'LW', group: 'FWD', top: 16, left: 20 },
+            { id: 'st', label: 'ST', group: 'FWD', top: 10, left: 50 },
+            { id: 'rw', label: 'RW', group: 'FWD', top: 16, left: 80 },
+        ],
+        '3-5-2': [
+            { id: 'gk', label: 'GK', group: 'GK', top: 90, left: 50 },
+            { id: 'cb1', label: 'CB', group: 'DEF', top: 73, left: 25 },
+            { id: 'cb2', label: 'CB', group: 'DEF', top: 76, left: 50 },
+            { id: 'cb3', label: 'CB', group: 'DEF', top: 73, left: 75 },
+            { id: 'lwb', label: 'LWB', group: 'MID', top: 52, left: 8 },
+            { id: 'cm1', label: 'CM', group: 'MID', top: 47, left: 30 },
+            { id: 'cm2', label: 'CM', group: 'MID', top: 50, left: 50 },
+            { id: 'cm3', label: 'CM', group: 'MID', top: 47, left: 70 },
+            { id: 'rwb', label: 'RWB', group: 'MID', top: 52, left: 92 },
+            { id: 'st1', label: 'ST', group: 'FWD', top: 12, left: 35 },
+            { id: 'st2', label: 'ST', group: 'FWD', top: 12, left: 65 },
+        ],
+    };
+
+    let currentAssignments = {}; // slotId -> player name
+    let selectedPlayer = null;   // player name selected via click, awaiting a slot tap
+
+    function renderFormation() {
+        const key = document.getElementById('formation-select').value;
+        const slots = FORMATIONS[key];
+        currentAssignments = {};
+        selectedPlayer = null;
+
+        const pitch = document.getElementById('pitch');
+        pitch.querySelectorAll('.formation-slot').forEach(el => el.remove());
+
+        slots.forEach(slot => {
+            const el = document.createElement('div');
+            el.className = 'formation-slot';
+            el.dataset.slotId = slot.id;
+            el.dataset.group = slot.group;
+            el.style.top = slot.top + '%';
+            el.style.left = slot.left + '%';
+            el.innerHTML = `<span class="slot-pos">${slot.label}</span><span class="slot-name">+</span>`;
+
+            el.addEventListener('click', () => onSlotClick(slot.id));
+            el.addEventListener('dragover', e => { e.preventDefault(); el.classList.add('drag-over'); });
+            el.addEventListener('dragleave', () => el.classList.remove('drag-over'));
+            el.addEventListener('drop', e => {
+                e.preventDefault();
+                el.classList.remove('drag-over');
+                const name = e.dataTransfer.getData('text/player');
+                if (name) assignPlayer(slot.id, name);
+            });
+
+            pitch.appendChild(el);
+        });
+
+        renderSquadPanel();
+    }
+
+    function renderSquadPanel() {
+        ['GK', 'DEF', 'MID', 'FWD'].forEach(group => {
+            const container = document.getElementById('squad-' + group);
+            if (!container) return;
+            container.innerHTML = '';
+            LFC_PLAYERS.filter(p => p.group === group).forEach(p => {
+                const isAssigned = Object.values(currentAssignments).includes(p.name);
+                const chip = document.createElement('div');
+                chip.className = 'player-chip' + (isAssigned ? ' assigned' : '') +
+                    (selectedPlayer === p.name ? ' selected' : '');
+                chip.textContent = p.name;
+                chip.draggable = true;
+                chip.addEventListener('dragstart', e => e.dataTransfer.setData('text/player', p.name));
+                chip.addEventListener('click', () => onChipClick(p.name));
+                container.appendChild(chip);
+            });
+        });
+    }
+
+    function onChipClick(name) {
+        selectedPlayer = (selectedPlayer === name) ? null : name;
+        renderSquadPanel();
+    }
+
+    function onSlotClick(slotId) {
+        if (selectedPlayer) {
+            assignPlayer(slotId, selectedPlayer);
+            selectedPlayer = null;
+        } else if (currentAssignments[slotId]) {
+            delete currentAssignments[slotId];
+            updateSlotDisplay(slotId);
+        }
+        renderSquadPanel();
+    }
+
+    function assignPlayer(slotId, name) {
+        // A player can only occupy one slot at a time — clear any previous slot.
+        Object.keys(currentAssignments).forEach(sid => {
+            if (currentAssignments[sid] === name) {
+                delete currentAssignments[sid];
+                updateSlotDisplay(sid);
+            }
+        });
+        currentAssignments[slotId] = name;
+        updateSlotDisplay(slotId);
+    }
+
+    function updateSlotDisplay(slotId) {
+        const el = document.querySelector(`.formation-slot[data-slot-id="${slotId}"]`);
+        if (!el) return;
+        const name = currentAssignments[slotId];
+        const nameSpan = el.querySelector('.slot-name');
+        if (name) {
+            nameSpan.textContent = name.split(' ').slice(-1)[0];
+            el.classList.add('filled');
+        } else {
+            nameSpan.textContent = '+';
+            el.classList.remove('filled');
+        }
+    }
+
+    function clearFormation() {
+        currentAssignments = {};
+        selectedPlayer = null;
+        document.querySelectorAll('.formation-slot').forEach(el => updateSlotDisplay(el.dataset.slotId));
+        renderSquadPanel();
+    }
+
+    function autoFillFormation() {
+        const key = document.getElementById('formation-select').value;
+        const slots = FORMATIONS[key];
+        const byGroup = { GK: [], DEF: [], MID: [], FWD: [] };
+        LFC_PLAYERS.forEach(p => byGroup[p.group].push(p.name));
+        const used = new Set();
+
+        currentAssignments = {};
+        slots.forEach(slot => {
+            const pick = (byGroup[slot.group] || []).find(n => !used.has(n));
+            if (pick) {
+                used.add(pick);
+                currentAssignments[slot.id] = pick;
+            }
+        });
+
+        slots.forEach(slot => updateSlotDisplay(slot.id));
+        renderSquadPanel();
+    }
+
+    loadMatches();
+    renderFormation();
+
+
+    </script>
+</body>
+</html>
